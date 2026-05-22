@@ -12,14 +12,12 @@ datasource db {
   provider = "postgresql"
 }
 
-// 1. Stan konta Emerald (Portfel)
 model Wallet {
   id        String   @id @default(uuid())
   balance   Decimal  @default(4250.00) @db.Decimal(10, 2)
   updatedAt DateTime @updatedAt
 }
 
-// 2. Baza Produktów (Twój asortyment)
 model Product {
   id        String   @id @default(uuid())
   name      String
@@ -29,39 +27,33 @@ model Product {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relacja: Jeden produkt może mieć wiele kampanii (lub jedną aktywną)
   campaigns Campaign[]
 }
 
-// 3. Baza Kampanii
 model Campaign {
   id        String   @id @default(uuid())
   name      String
   bidAmount Decimal  @db.Decimal(10, 2)
   fund      Decimal  @db.Decimal(10, 2)
   status    Boolean  @default(true)
-  town      String? // Opcjonalne, zgodnie z Twoim formularzem
+  town      String?
   radius    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relacja z Produktem
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  // Relacja Wiele-do-Wielu ze Słowami Kluczowymi (Prisma automatycznie stworzy tabelę łączącą)
   keywords Keyword[]
 }
 
-// 4. Słownik Słów Kluczowych (dla pre-populated typeahead)
 model Keyword {
   id        String     @id @default(uuid())
-  name      String     @unique // "elektronika", "sport" itp.
+  name      String     @unique
   campaigns Campaign[]
 }
 
-// 5. Opcjonalnie: Słownik Miast (jeśli chcesz trzymać listę miast w bazie, a nie tylko w kodzie)
 model Town {
   id   String @id @default(uuid())
-  name String @unique // "Warszawa", "Kraków" itp.
+  name String @unique
 }
