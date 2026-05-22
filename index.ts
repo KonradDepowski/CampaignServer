@@ -1,6 +1,6 @@
 import express from "express";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "./generated/prisma/client.js";
+import { PrismaClient } from "./generated/prisma/client";
 
 const router = express.Router();
 const adapter = new PrismaPg({

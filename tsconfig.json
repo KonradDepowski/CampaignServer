@@ -17,8 +17,8 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "target": "ES2023",
     "strict": true,
     "esModuleInterop": true,
@@ -38,7 +38,7 @@
 
     // Recommended Options
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    // "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
