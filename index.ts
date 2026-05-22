@@ -36,6 +36,22 @@ router.post("/campaign", async (req, res) => {
   }
 });
 
+router.get("/campaign/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const campaign = await prisma.campaign.findUnique({ where: { id: id } });
+    if (!campaign) {
+      return res.status(404).json({ error: "Campaign not found" });
+    }
+    res.json(campaign);
+  } catch (err: any) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: err?.message, code: err?.code, meta: err?.meta });
+  }
+});
+
 router.put("/campaign/:id", async (req, res) => {
   try {
     const { id } = req.params;
