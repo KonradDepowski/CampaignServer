@@ -77,10 +77,29 @@ router.get("/campaign/:id", async (req, res) => {
 router.put("/campaign/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, bidAmount, fund, status, town, radius, productId } = req.body;
+    const { name, bidAmount, fund, status, town, radius, productId, keywords } =
+      req.body;
     const campaign = await prisma.campaign.update({
-      where: { id: id },
-      data: { name, bidAmount, fund, status, town, radius, productId },
+      where: { id },
+      data: {
+        name,
+        bidAmount,
+        fund,
+        status,
+        town,
+        radius,
+        productId,
+        ...(keywords !== undefined && {
+          keywords: {
+            set: [],
+            connectOrCreate: keywords.map((k: string) => ({
+              where: { name: k },
+              create: { name: k },
+            })),
+          },
+        }),
+      },
+      include: { keywords: true },
     });
     res.json(campaign);
   } catch (err: any) {
