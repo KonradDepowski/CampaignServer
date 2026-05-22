@@ -22,15 +22,26 @@ router.get("/campaigns", async (req, res) => {
 
 router.post("/campaign", async (req, res) => {
   try {
-    const { name, bidAmount, fund, status, town, radius, productId } = req.body;
+    const { name, bidAmount, fund, status, town, radius, productId, keywords } =
+      req.body;
     const campaign = await prisma.campaign.create({
-      data: { name, bidAmount, fund, status, town, radius, productId },
+      data: {
+        name,
+        bidAmount,
+        fund,
+        status,
+        town,
+        radius,
+        productId,
+        ...(keywords?.length && {
+          keywords: { connect: keywords.map((k: string) => ({ name: k })) },
+        }),
+      },
     });
     res.status(201).json(campaign);
   } catch (err: any) {
     console.error(err);
     res
-
       .status(500)
       .json({ error: err?.message, code: err?.code, meta: err?.meta });
   }
