@@ -34,7 +34,12 @@ router.post("/campaign", async (req, res) => {
         radius,
         productId,
         ...(keywords?.length && {
-          keywords: { connect: keywords.map((k: string) => ({ name: k })) },
+          keywords: {
+            connectOrCreate: keywords.map((k: string) => ({
+              where: { name: k },
+              create: { name: k },
+            })),
+          },
         }),
       },
     });
